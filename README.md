@@ -1,2 +1,2 @@
 # APIsex
-APIsex: API security for elixir
+APIsex: API security for elixir (Plug)
