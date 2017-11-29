@@ -12,7 +12,8 @@ defmodule APISex do
       :world
 
   """
-  def hello do
-    :world
+
+  def is_authenticated?() do
+    :ok
   end
 end
