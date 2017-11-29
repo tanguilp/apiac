@@ -1,4 +1,4 @@
-defmodule Authn do
+defmodule APISex.Authn do
   @type t :: %__MODULE__{
     auth_scheme: atom(),
     client: String.t,
