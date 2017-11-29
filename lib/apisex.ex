@@ -1,4 +1,4 @@
-defmodule APIsex do
+defmodule APISex do
   @moduledoc """
   Documentation for APIsex.
   """

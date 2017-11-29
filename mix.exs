@@ -1,4 +1,4 @@
-defmodule APIsex.Mixfile do
+defmodule APISex.Mixfile do
   use Mix.Project
 
   def project do
@@ -19,7 +19,7 @@ defmodule APIsex.Mixfile do
   defp deps do
     [
       {:cowboy, "~> 1.0.0"},
-      {:plug, "~> 1.0}
+      {:plug, "~> 1.0"}
     ]
   end
 end
