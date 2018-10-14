@@ -3,13 +3,16 @@ defmodule APISex.Authenticator do
   TODO
   """
 
-  @type t :: atom()
+  @type opts :: Keyword.t
+  @type credentials :: any()
 
-  @type creds :: any()
-
-  @callback extract_credentials(Plug.Conn.t) :: {:ok, {Plug.Conn.t, creds}} | {:error, {Plug.Conn.t, any()}}
+  @callback extract_credentials(Plug.Conn.t, opts) ::
+    {:ok, Plug.Conn.t, credentials} | {:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{}}
   
-  @callback validate_credentials(Plug.Conn.t, creds) :: {:ok, Plug.Conn.t} | {:error, Plug.Conn.t}
+  @callback validate_credentials(Plug.Conn.t, credentials, opts) ::
+    {:ok, Plug.Conn.t} | {:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{}}
+
+  @callback set_error_response(Plug.Conn.t, %APISex.Authenticator.Unauthorized{}, opts) :: Plug.Conn.t
 
   defmodule Unauthorized do
     defexception [:authenticator, :reason]

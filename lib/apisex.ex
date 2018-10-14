@@ -9,9 +9,9 @@ defmodule APISex do
   def is_machine_to_machine?(%Plug.Conn{private: %{APISex_client: client, APISex_subject: subject}}) when is_binary(client) and is_nil(subject), do: true
   def is_machine_to_machine?(_), do: false
 
-  @spec is_physical_user_access?(Plug.Conn.t) :: boolean()
-  def is_physical_user_access?(%Plug.Conn{private: %{APISex_subject: sub}}) when is_binary(sub), do: true
-  def is_physical_user_access?(_), do: false
+  @spec is_subject_authenticated?(Plug.Conn.t) :: boolean()
+  def is_subject_authenticated?(%Plug.Conn{private: %{APISex_subject: sub}}) when is_binary(sub), do: true
+  def is_subject_authenticated?(_), do: false
 
   @spec authenticator(Plug.Conn.t) :: atom() | nil
   def authenticator(%Plug.Conn{private: %{APISex_authenticator: authenticator}}), do: authenticator
