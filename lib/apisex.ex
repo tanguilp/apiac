@@ -8,6 +8,7 @@ defmodule APISex do
   @type client_attributes :: %{String.t => String.t}
   @type subject :: String.t
   @type subject_attributes :: %{String.t => String.t}
+  @type http_authn_scheme :: String.t
 
   def is_authenticated?(%Plug.Conn{private: %{apisex_authenticator: authenticator}}) when is_atom(authenticator), do: true
   def is_authenticated?(_), do: false
@@ -43,4 +44,41 @@ defmodule APISex do
   @spec subject_attributes(Plug.Conn.t) :: %{String.t => String.t} | nil
   def subject_attributes(%Plug.Conn{private: %{apisex_subject_attributes: subject_attributes}}), do: subject_attributes
   def subject_attributes(_), do: nil
+
+  @spec set_WWauthenticate_challenge(Plug.Conn.t, http_authn_scheme, %{String.t => String.t}) :: Plug.Conn.t
+  def set_WWauthenticate_challenge(conn, scheme, opts) do
+    if not is_rfc7230_token?(scheme), do: raise "Invalid scheme value as per RFC7230"
+
+    header_val = scheme <> " " <> Enum.join(
+      Enum.map(
+        opts,
+        fn {k, v} ->
+          if not is_rfc7230_token?(k), do: raise "Invalid auth param value"
+          if not is_rfc7230_token?(v) and not is_rfc7230_quotedstring?(v), do: raise "Invalid auth param value"
+
+          k <> "=" <> v
+        end
+      ),
+      ","
+    )
+
+    case Plug.Conn.get_resp_header(conn, "www-authenticate") do
+      [] ->
+        Plug.Conn.put_resp_header(conn, "www-authenticate", header_val)
+
+      [existing_header_val|_] ->
+        Plug.Conn.put_resp_header(conn, "www-authenticate", existing_header_val <> ", " <> header_val)
+    end
+  end
+
+  # see https://tools.ietf.org/html/rfc7230#section-3.2.6
+  @spec is_rfc7230_quotedstring?(String.t) :: boolean()
+  def is_rfc7230_quotedstring?(val) do
+    Regex.run(~r{^"([\v\s\x21\x23-\x5B\x5D-\x7E\x80-\xFF]|\\\v|\\\s|\\[\x21-\x7E]|\\[\x80-\xFF])*"$}, val) != nil
+  end
+
+  @spec is_rfc7230_token?(String.t) :: boolean()
+  def is_rfc7230_token?(val) do
+    Regex.run(~r{^[!#$%&'*+\-.\^_`|~0-9A-Za-z]+$}, val) != nil
+  end
 end
