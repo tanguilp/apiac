@@ -54,7 +54,13 @@ defmodule APISex do
         opts,
         fn {k, v} ->
           if not is_rfc7230_token?(k), do: raise "Invalid auth param value"
-          if not is_rfc7230_token?(v) and not is_rfc7230_quotedstring?(v), do: raise "Invalid auth param value"
+          # https://tools.ietf.org/html/rfc7235#section-2.2
+          #
+          #    For historical reasons, a sender MUST only generate the quoted-string
+          #    syntax.  Recipients might have to support both token and
+          #    quoted-string syntax for maximum interoperability with existing
+          #    clients that have been accepting both notations for a long time.
+          if not is_rfc7230_quotedstring?(v), do: raise "Invalid auth param value"
 
           k <> "=" <> v
         end
