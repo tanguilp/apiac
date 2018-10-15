@@ -2,6 +2,12 @@ defmodule APISex do
   @moduledoc """
   Documentation for APIsex.
   """
+
+  @type client :: String.t
+  @type client_attributes :: %{String.t => String.t}
+  @type subject :: String.t
+  @type subject_attributes :: %{String.t => String.t}
+
   def is_authenticated?(%Plug.Conn{private: %{APISex_authenticator: authenticator}}) when is_atom(authenticator), do: true
   def is_authenticated?(_), do: false
 
@@ -21,7 +27,7 @@ defmodule APISex do
   def authenticator_data(%Plug.Conn{private: %{APISex_authenticator_metadata: authenticator_metadata}}), do: authenticator_metadata
   def authenticator_data(_), do: nil
 
-  @spec client(Plug.Conn.t) :: String.t | nil
+  @spec client(Plug.Conn.t) :: client | nil
   def client(%Plug.Conn{private: %{APISex_client: client}}), do: client
   def client(_), do: nil
 
@@ -29,7 +35,7 @@ defmodule APISex do
   def client_attributes(%Plug.Conn{private: %{APISex_client_attributes: client_attributes}}), do: client_attributes
   def client_attributes(_), do: nil
 
-  @spec subject(Plug.Conn.t) :: String.t | nil
+  @spec subject(Plug.Conn.t) :: subject | nil
   def subject(%Plug.Conn{private: %{APISex_subject: subject}}), do: subject
   def subject(_), do: nil
 
