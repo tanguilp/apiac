@@ -7,7 +7,7 @@ defmodule APISex.Authenticator do
   @type credentials :: any()
 
   @callback extract_credentials(Plug.Conn.t, opts) ::
-    {:ok, Plug.Conn.t, credentials} | {:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{})}
+    {:ok, Plug.Conn.t, credentials} | {:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{}}
   
   @callback validate_credentials(Plug.Conn.t, credentials, opts) ::
     {:ok, Plug.Conn.t} | {:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{}}
