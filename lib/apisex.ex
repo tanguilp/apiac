@@ -45,8 +45,8 @@ defmodule APISex do
   def subject_attributes(%Plug.Conn{private: %{apisex_subject_attributes: subject_attributes}}), do: subject_attributes
   def subject_attributes(_), do: nil
 
-  @spec set_WWauthenticate_challenge(Plug.Conn.t, http_authn_scheme, %{String.t => String.t}) :: Plug.Conn.t
-  def set_WWauthenticate_challenge(conn, scheme, opts) do
+  @spec set_WWWauthenticate_challenge(Plug.Conn.t, http_authn_scheme, %{String.t => String.t}) :: Plug.Conn.t
+  def set_WWWauthenticate_challenge(conn, scheme, opts) do
     if not is_rfc7230_token?(scheme), do: raise "Invalid scheme value as per RFC7230"
 
     header_val = scheme <> " " <> Enum.join(
