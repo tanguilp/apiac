@@ -1,5 +1,6 @@
 defmodule APISex do
   @moduledoc """
+  Convenience functions to work with APISex and API requests
   """
 
   @type realm :: String.t
@@ -42,7 +43,7 @@ defmodule APISex do
   @doc """
   Returns the `APISex.Authenticator` that has authenticated the connection, `nil` if none has
   """
-  
+
   @spec authenticator(Plug.Conn.t) :: atom() | nil
   def authenticator(%Plug.Conn{private: %{apisex_authenticator: authenticator}}), do: authenticator
   def authenticator(_), do: nil
@@ -96,8 +97,8 @@ defmodule APISex do
 
   ## Examples
   ```elixir
-  iex> conn(:get, "/ressource") |>                                           
-  ...> Plug.Conn.put_status(:unauthorized) |>                                
+  iex> conn(:get, "/ressource") |>
+  ...> Plug.Conn.put_status(:unauthorized) |>
   ...> APISex.set_WWWauthenticate_challenge("Basic", %{"realm" => "realm_1"}) |>
   ...> APISex.set_WWWauthenticate_challenge("Bearer", %{"realm" => "realm_1", "error" => "insufficient_scope", "scope" => "group:read group:write"}) 
   %Plug.Conn{
