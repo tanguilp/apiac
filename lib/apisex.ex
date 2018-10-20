@@ -5,9 +5,8 @@ defmodule APISex do
 
   @type realm :: String.t
   @type client :: String.t
-  @type client_attributes :: %{String.t => String.t}
   @type subject :: String.t
-  @type subject_attributes :: %{String.t => String.t}
+  @type metadata :: %{String.t => String.t}
   @type http_authn_scheme :: String.t
 
   @doc """
@@ -65,14 +64,6 @@ defmodule APISex do
   def client(_), do: nil
 
   @doc """
-  Returns metadata associated with the client, or `nil` if there's none
-  """
-
-  @spec client_attributes(Plug.Conn.t) :: %{String.t => String.t} | nil
-  def client_attributes(%Plug.Conn{private: %{apisex_client_attributes: client_attributes}}), do: client_attributes
-  def client_attributes(_), do: nil
-
-  @doc """
   Returns the name of the subject, or `nil` if it was not set (unauthenticated connection, machine-tomachine authentication...)
   """
 
@@ -84,9 +75,9 @@ defmodule APISex do
   Returns metadata associated with the subject, or `nil` if there's none
   """
 
-  @spec subject_attributes(Plug.Conn.t) :: %{String.t => String.t} | nil
-  def subject_attributes(%Plug.Conn{private: %{apisex_subject_attributes: subject_attributes}}), do: subject_attributes
-  def subject_attributes(_), do: nil
+  @spec metadata(Plug.Conn.t) :: %{String.t => String.t} | nil
+  def metadata(%Plug.Conn{private: %{apisex_metadata: metadata}}), do: metadata
+  def metadata(_), do: nil
 
   @doc """
   Sets the HTTP WWW-Authenticate header of a `Plug.Conn` and returns it.
@@ -100,7 +91,7 @@ defmodule APISex do
   iex> conn(:get, "/ressource") |>
   ...> Plug.Conn.put_status(:unauthorized) |>
   ...> APISex.set_WWWauthenticate_challenge("Basic", %{"realm" => "realm_1"}) |>
-  ...> APISex.set_WWWauthenticate_challenge("Bearer", %{"realm" => "realm_1", "error" => "insufficient_scope", "scope" => "group:read group:write"}) 
+  ...> APISex.set_WWWauthenticate_challenge("Bearer", %{"realm" => "realm_1", "error" => "insufficient_scope", "scope" => "group:read group:write"})
   %Plug.Conn{
     adapter: {Plug.Adapters.Test.Conn, :...},
     assigns: %{},
