@@ -102,4 +102,14 @@ defmodule APIsexTest do
     refute APISex.rfc7230_token?("abcABCmno\\0123457689MNOxyzXYZ")
     refute APISex.rfc7230_token?("abcABCmno\"0123457689MNOxyzXYZ")
   end
+
+  test "RFC 7235 token68" do
+    assert APISex.rfc7235_token68?("dscwdx==")
+    assert APISex.rfc7235_token68?("-._~+/")
+
+    refute APISex.rfc7235_token68?("a<zfeaw")
+    refute APISex.rfc7235_token68?("azf eaw")
+    refute APISex.rfc7235_token68?("azf#eaw")
+    refute APISex.rfc7235_token68?("Noël")
+  end
 end

@@ -191,4 +191,12 @@ defmodule APISex do
   def rfc7230_token?(val) do
     Regex.run(~r{^[!#$%&'*+\-.\^_`|~0-9A-Za-z]+$}, val) != nil
   end
+
+  @doc """
+  Returns `true` if the input string is an [rfc7235 token68](https://tools.ietf.org/html/rfc7235#section-2.1), `false` otherwise
+  """
+
+  def rfc7235_token68?(val) do
+    Regex.run(~r{^[0-9A-Za-z\-._~+/]+=*$}, val) != nil
+  end
 end
