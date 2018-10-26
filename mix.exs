@@ -24,7 +24,6 @@ defmodule APISex.Mixfile do
 
   defp deps do
     [
-      {:cowboy, "~> 2.0"},
       {:plug, "~> 1.0"},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false}
     ]
