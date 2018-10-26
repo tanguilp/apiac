@@ -48,14 +48,6 @@ defmodule APISex do
   def authenticator(_), do: nil
 
   @doc """
-  Returns authenticator-specific metadata that can be usefull to the application (e.g. the OAuth2 access token), or `nil` if there is none
-  """
-
-  @spec authenticator_data(Plug.Conn.t) :: %{} | nil
-  def authenticator_data(%Plug.Conn{private: %{apisex_authenticator_metadata: authenticator_metadata}}), do: authenticator_metadata
-  def authenticator_data(_), do: nil
-
-  @doc """
   Returns the name of the client, or `nil` if the connection is unauthenticated
   """
 
@@ -72,7 +64,7 @@ defmodule APISex do
   def subject(_), do: nil
 
   @doc """
-  Returns metadata associated with the subject, or `nil` if there's none
+  Returns metadata associated with the authenticated connection, or `nil` if there's none
   """
 
   @spec metadata(Plug.Conn.t) :: %{String.t => String.t} | nil
