@@ -10,10 +10,10 @@ defmodule APISex.Filter do
   @callback set_error_response(Plug.Conn.t, %APISex.Filter.Forbidden{}, opts) :: Plug.Conn.t
 
   defmodule Forbidden do
-    defexception [:filter, :reason]
+    defexception [:filter, :reason, error_data: nil]
 
-    def exception(filter, reason) do
-      %__MODULE__{filter: filter, reason: reason}
+    def exception(filter, reason, error_data \\ nil) do
+      %__MODULE__{filter: filter, reason: reason, error_data: error_data}
     end
 
     def message(%__MODULE__{filter: filter, reason: reason}) do
