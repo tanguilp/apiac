@@ -38,39 +38,53 @@ defmodule APIsexTest do
   test "WWW-Authenticate header set - one scheme" do
     conn =
       conn(:get, "/")
-      |> APISex.set_WWWauthenticate_challenge("Bearer",
-                                              %{
-                                                "realm" => "My realm",
-                                                "additionalparam" => "additional value"
-                                              })
+      |> APISex.set_WWWauthenticate_challenge(
+        "Bearer",
+        %{
+          "realm" => "My realm",
+          "additionalparam" => "additional value"
+        }
+      )
 
-    assert Plug.Conn.get_resp_header(conn, "www-authenticate") in
-    [
-      ["Bearer realm=\"My realm\", additionalparam=\"additional value\""],
-      ["Bearer additionalparam=\"additional value\", realm=\"My realm\""]
-    ]
+    assert Plug.Conn.get_resp_header(conn, "www-authenticate") in [
+             ["Bearer realm=\"My realm\", additionalparam=\"additional value\""],
+             ["Bearer additionalparam=\"additional value\", realm=\"My realm\""]
+           ]
   end
 
   test "WWW-Authenticate header set - two scheme" do
     conn =
       conn(:get, "/")
       |> APISex.set_WWWauthenticate_challenge("Basic", %{"realm" => "basic realm"})
-      |> APISex.set_WWWauthenticate_challenge("Bearer",
-                                              %{
-                                                "realm" => "My realm",
-                                                "error" => "insufficient_scope",
-                                                "scope" => "group:read group:write"
-                                              })
+      |> APISex.set_WWWauthenticate_challenge(
+        "Bearer",
+        %{
+          "realm" => "My realm",
+          "error" => "insufficient_scope",
+          "scope" => "group:read group:write"
+        }
+      )
 
-    assert Plug.Conn.get_resp_header(conn, "www-authenticate") in
-    [
-      ["Basic realm=\"basic realm\", Bearer realm=\"My realm\", error=\"insufficient_scope\", scope=\"group:read group:write\""],
-      ["Basic realm=\"basic realm\", Bearer realm=\"My realm\", scope=\"group:read group:write\", error=\"insufficient_scope\""],
-      ["Basic realm=\"basic realm\", Bearer scope=\"group:read group:write\", realm=\"My realm\", error=\"insufficient_scope\""],
-      ["Basic realm=\"basic realm\", Bearer scope=\"group:read group:write\", error=\"insufficient_scope\", realm=\"My realm\""],
-      ["Basic realm=\"basic realm\", Bearer error=\"insufficient_scope\", scope=\"group:read group:write\", realm=\"My realm\""],
-      ["Basic realm=\"basic realm\", Bearer error=\"insufficient_scope\", realm=\"My realm\", scope=\"group:read group:write\""]
-    ]
+    assert Plug.Conn.get_resp_header(conn, "www-authenticate") in [
+             [
+               "Basic realm=\"basic realm\", Bearer realm=\"My realm\", error=\"insufficient_scope\", scope=\"group:read group:write\""
+             ],
+             [
+               "Basic realm=\"basic realm\", Bearer realm=\"My realm\", scope=\"group:read group:write\", error=\"insufficient_scope\""
+             ],
+             [
+               "Basic realm=\"basic realm\", Bearer scope=\"group:read group:write\", realm=\"My realm\", error=\"insufficient_scope\""
+             ],
+             [
+               "Basic realm=\"basic realm\", Bearer scope=\"group:read group:write\", error=\"insufficient_scope\", realm=\"My realm\""
+             ],
+             [
+               "Basic realm=\"basic realm\", Bearer error=\"insufficient_scope\", scope=\"group:read group:write\", realm=\"My realm\""
+             ],
+             [
+               "Basic realm=\"basic realm\", Bearer error=\"insufficient_scope\", realm=\"My realm\", scope=\"group:read group:write\""
+             ]
+           ]
   end
 
   test "WWW-Authenticate wrong param encoding raises exception" do

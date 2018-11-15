@@ -7,7 +7,7 @@ defmodule APISex.Authenticator do
   authentication scheme to use, etc.
   """
 
-  @type opts :: Keyword.t
+  @type opts :: Keyword.t()
   @type credentials :: any()
 
   @doc """
@@ -23,9 +23,10 @@ defmodule APISex.Authenticator do
   The `opts` parameter is the value returned by `Plug.init/1`
   """
 
-  @callback extract_credentials(Plug.Conn.t, opts) ::
-    {:ok, Plug.Conn.t, credentials} | {:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{}}
-  
+  @callback extract_credentials(Plug.Conn.t(), opts) ::
+              {:ok, Plug.Conn.t(), credentials}
+              | {:error, Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}}
+
   @doc """
   Validate credentials rpreviously extracted by `APISex.Authenticator.extract_credentials/2`
 
@@ -39,8 +40,8 @@ defmodule APISex.Authenticator do
   The `opts` parameter is the value returned by `Plug.init/1`
   """
 
-  @callback validate_credentials(Plug.Conn.t, credentials, opts) ::
-    {:ok, Plug.Conn.t} | {:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{}}
+  @callback validate_credentials(Plug.Conn.t(), credentials, opts) ::
+              {:ok, Plug.Conn.t()} | {:error, Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}}
 
   @doc """
   Sets the HTTP error response when authentication failed. Typically, the error is returned as:
@@ -52,7 +53,8 @@ defmodule APISex.Authenticator do
   The `opts` parameter is the value returned by `Plug.init/1`
   """
 
-  @callback set_error_response(Plug.Conn.t, %APISex.Authenticator.Unauthorized{}, opts) :: Plug.Conn.t
+  @callback set_error_response(Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}, opts) ::
+              Plug.Conn.t()
 
   defmodule Unauthorized do
     defexception [:authenticator, :reason]

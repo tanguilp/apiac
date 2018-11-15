@@ -3,11 +3,12 @@ defmodule APISex.Filter do
   TODO
   """
 
-  @type opts :: Keyword.t
+  @type opts :: Keyword.t()
 
-  @callback filter(Plug.Conn.t, opts) :: {:ok, Plug.Conn.t} | {:error, Plug.Conn.t, %APISex.Filter.Forbidden{}}
+  @callback filter(Plug.Conn.t(), opts) ::
+              {:ok, Plug.Conn.t()} | {:error, Plug.Conn.t(), %APISex.Filter.Forbidden{}}
 
-  @callback set_error_response(Plug.Conn.t, %APISex.Filter.Forbidden{}, opts) :: Plug.Conn.t
+  @callback set_error_response(Plug.Conn.t(), %APISex.Filter.Forbidden{}, opts) :: Plug.Conn.t()
 
   defmodule Forbidden do
     defexception [:filter, :reason, error_data: nil]
