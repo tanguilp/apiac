@@ -28,7 +28,7 @@ defmodule APISex.Authenticator do
               | {:error, Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}}
 
   @doc """
-  Validate credentials rpreviously extracted by `APISex.Authenticator.extract_credentials/2`
+  Validate credentials previously extracted by `APISex.Authenticator.extract_credentials/2`
 
   Returns `{:ok, Plug.Conn.t` if credentials are valid. It is required
   to return the `Plug.Conn` object since some things can be fetched in the process
@@ -44,7 +44,9 @@ defmodule APISex.Authenticator do
               {:ok, Plug.Conn.t()} | {:error, Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}}
 
   @doc """
-  Sets the HTTP error response when authentication failed. Typically, the error is returned as:
+  Sets the HTTP error response when authentication failed.
+  
+  Typically, the error is returned as:
   - An error status code (e.g. '401 Unauthorized')
   - `WWW-Authenticate` standard HTTP header
 
