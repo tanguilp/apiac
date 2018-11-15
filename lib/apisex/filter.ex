@@ -27,7 +27,7 @@ defmodule APISex.Filter do
   - The `opts[:error_response_verbosity]` function
   Specifics are to be documented in implementation plugs
   """
-  @callback set_error_response(Plug.Conn.t(), %APISex.Filter.Forbidden{}, opts) :: Plug.Conn.t()
+  @callback send_error_response(Plug.Conn.t(), %APISex.Filter.Forbidden{}, opts) :: Plug.Conn.t()
 
   defmodule Forbidden do
     defexception [:filter, :reason, error_data: nil]
