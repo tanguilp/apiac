@@ -179,7 +179,31 @@ defmodule APISex do
   Returns `true` if the input string is an [rfc7235 token68](https://tools.ietf.org/html/rfc7235#section-2.1), `false` otherwise
   """
 
+  @spec rfc7235_token68?(String.t) :: boolean()
   def rfc7235_token68?(val) do
     Regex.run(~r{^[0-9A-Za-z\-._~+/]+=*$}, val) != nil
+  end
+
+  @doc """
+  Returns the following error response verbosity level depending on the environment:
+  - dev: `:debug`
+  - test: `:normal`
+  - prod: `:normal`
+
+  It uses the APISex configuration key `:env` that is by defaults executed to `Mix.env()`
+  """
+
+  @spec default_error_response_verbosity(Plug.Conn.t()) :: :debug | :normal | :minimal
+  def default_error_response_verbosity(_conn) do
+    case Application.get_env(:apisex, :env) do
+      :dev ->
+        :debug
+
+      :test ->
+        :normal
+
+      :prod ->
+        :normal
+    end
   end
 end
