@@ -6,7 +6,7 @@ defmodule APISex.Filter do
   information.
   """
 
-  @type opts :: Keyword.t()
+  @type opts :: any()
 
   @doc """
   Either allows or blocks the connection
