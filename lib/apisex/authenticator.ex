@@ -7,7 +7,7 @@ defmodule APISex.Authenticator do
   authentication scheme to use, etc.
   """
 
-  @type opts :: Keyword.t()
+  @type opts :: any()
   @type credentials :: any()
 
   @doc """
@@ -18,7 +18,16 @@ defmodule APISex.Authenticator do
   (e.g. the HTTP body). The format of `credentials` is specific to an `APISex.Authenticator`
 
   Returns `{:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{}}` if no
-  credentials were found
+  credentials were found or credential extraction failed (because request is malformed,
+  parameters are non-standard, or any other reason). When, and only when credentials
+  are not present in the request, the `reason` field of the
+  `%APISex.Authenticator.Unauthorized{}` shall be set to the atom `:credentials_not_found`.
+  The semantics are the following:
+  - if credentials were *not* found, the HTTP `WWW-Authenticate` can be set to advertise the
+  calling client of the available authentication scheme
+  - if credentials were found but an error happens when extracting it, that is an error
+  (since the client tried to authenticate) and the plug pipeline execution should be
+  stopped
 
   The `opts` parameter is the value returned by `Plug.init/1`
   """
@@ -44,18 +53,21 @@ defmodule APISex.Authenticator do
               {:ok, Plug.Conn.t()} | {:error, Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}}
 
   @doc """
-  Sets the HTTP error response when authentication failed.
-  
+  Sets the HTTP error response and halts the plug
+
   Typically, the error is returned as:
   - An error status code (e.g. '401 Unauthorized')
   - `WWW-Authenticate` standard HTTP header
 
-  However, some authentication schemes can set the error in other headers, in the HTTP body, etc.
+  Specifically, it may set the headers, HTTP status code and HTTP body, depending on:
+  - The `#{__MODULE__}`
+  - The `opts[:error_response_verbosity]` function
+  Specifics are to be documented in implementation plugs
 
   The `opts` parameter is the value returned by `Plug.init/1`
   """
 
-  @callback set_error_response(Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}, opts) ::
+  @callback send_error_response(Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}, opts) ::
               Plug.Conn.t()
 
   defmodule Unauthorized do
