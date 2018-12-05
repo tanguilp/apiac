@@ -227,4 +227,39 @@ defmodule APISex do
         :normal
     end
   end
+
+  defmodule AuthFailureResponseData do
+    @enforce_keys [:module, :reason]
+    defstruct [:module, :reason, :www_authenticate_header, :status_code, :body]
+
+    @type t :: %__MODULE__{
+      module: module(),
+      reason: atom(),
+      www_authenticate_header: {String.t(), map()} | nil,
+      status_code: Plug.Conn.status() | nil,
+      body: String.t() | nil
+    }
+
+    @doc """
+    Returns the authentication failure information from the `Plug.Conn.t()`
+    """
+    @spec get_authentication_failure_data(Plug.Conn.t()) :: [t()] | nil
+    def get_authentication_failure_data(conn) do
+      conn.private[:apisex_failed_auth_response_data]
+    end
+
+    @doc """
+    Adds authentication failure information to the `Plug.Conn.t()` object
+    """
+    @spec put_authentication_failure_data(Plug.Conn.t(), t()) :: Plug.Conn.t()
+    def put_authentication_failure_data(
+      %Plug.Conn{private: %{apisex_failed_auth_response_data: data}} = conn,
+      failure_data) when is_list(data) do
+      Plug.Conn.put_private(conn, :apisex_failed_auth_response_data, [failure_data | data])
+    end
+
+    def put_authentication_failure_data(conn, failure_data) do
+      Plug.Conn.put_private(conn, :apisex_failed_auth_response_data, [failure_data])
+    end
+  end
 end
