@@ -243,22 +243,22 @@ defmodule APISex do
     @doc """
     Returns the authentication failure information from the `Plug.Conn.t()`
     """
-    @spec get_authentication_failure_data(Plug.Conn.t()) :: [t()] | nil
-    def get_authentication_failure_data(conn) do
+    @spec get(Plug.Conn.t()) :: [t()] | nil
+    def get(conn) do
       conn.private[:apisex_failed_auth_response_data]
     end
 
     @doc """
     Adds authentication failure information to the `Plug.Conn.t()` object
     """
-    @spec put_authentication_failure_data(Plug.Conn.t(), t()) :: Plug.Conn.t()
-    def put_authentication_failure_data(
+    @spec put(Plug.Conn.t(), t()) :: Plug.Conn.t()
+    def put(
       %Plug.Conn{private: %{apisex_failed_auth_response_data: data}} = conn,
       failure_data) when is_list(data) do
       Plug.Conn.put_private(conn, :apisex_failed_auth_response_data, [failure_data | data])
     end
 
-    def put_authentication_failure_data(conn, failure_data) do
+    def put(conn, failure_data) do
       Plug.Conn.put_private(conn, :apisex_failed_auth_response_data, [failure_data])
     end
   end
