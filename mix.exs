@@ -1,4 +1,4 @@
-defmodule APISex.Mixfile do
+defmodule APIac.Mixfile do
   use Mix.Project
 
   def project do
