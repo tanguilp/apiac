@@ -1,3 +1,3 @@
 use Mix.Config
 
-config :apisex, env: Mix.env()
+config :apiac, env: Mix.env()

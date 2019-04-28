@@ -1,6 +1,6 @@
-defmodule APISex do
+defmodule APIac do
   @moduledoc """
-  Convenience functions to work with APISex and API requests
+  Convenience functions to work with APIac and API requests
   """
 
   @type realm :: String.t()
@@ -10,10 +10,10 @@ defmodule APISex do
   @type http_authn_scheme :: String.t()
 
   @doc """
-  Returns `true` if the connection is authenticated by an APISex plug, `false` otherwise
+  Returns `true` if the connection is authenticated by an APIac plug, `false` otherwise
   """
 
-  def authenticated?(%Plug.Conn{private: %{apisex_authenticator: authenticator}})
+  def authenticated?(%Plug.Conn{private: %{apiac_authenticator: authenticator}})
       when is_atom(authenticator),
       do: true
 
@@ -23,10 +23,10 @@ defmodule APISex do
   Returns `true` if this is a machine-to-machine authentication (i.e. no *subject* involved), `false` otherwise
   """
   @spec machine_to_machine?(Plug.Conn.t()) :: boolean()
-  def machine_to_machine?(%Plug.Conn{private: %{apisex_client: client}} = conn)
+  def machine_to_machine?(%Plug.Conn{private: %{apiac_client: client}} = conn)
       when is_binary(client) do
     case conn do
-      %Plug.Conn{private: %{apisex_subject: subject}} ->
+      %Plug.Conn{private: %{apiac_subject: subject}} ->
         is_nil(subject)
 
       _ ->
@@ -41,17 +41,17 @@ defmodule APISex do
   """
 
   @spec subject_authenticated?(Plug.Conn.t()) :: boolean()
-  def subject_authenticated?(%Plug.Conn{private: %{apisex_subject: sub}}) when is_binary(sub),
+  def subject_authenticated?(%Plug.Conn{private: %{apiac_subject: sub}}) when is_binary(sub),
     do: true
 
   def subject_authenticated?(_), do: false
 
   @doc """
-  Returns the `APISex.Authenticator` that has authenticated the connection, `nil` if none has
+  Returns the `APIac.Authenticator` that has authenticated the connection, `nil` if none has
   """
 
   @spec authenticator(Plug.Conn.t()) :: atom() | nil
-  def authenticator(%Plug.Conn{private: %{apisex_authenticator: authenticator}}),
+  def authenticator(%Plug.Conn{private: %{apiac_authenticator: authenticator}}),
     do: authenticator
 
   def authenticator(_), do: nil
@@ -61,7 +61,7 @@ defmodule APISex do
   """
 
   @spec client(Plug.Conn.t()) :: client | nil
-  def client(%Plug.Conn{private: %{apisex_client: client}}), do: client
+  def client(%Plug.Conn{private: %{apiac_client: client}}), do: client
   def client(_), do: nil
 
   @doc """
@@ -69,7 +69,7 @@ defmodule APISex do
   """
 
   @spec subject(Plug.Conn.t()) :: subject | nil
-  def subject(%Plug.Conn{private: %{apisex_subject: subject}}), do: subject
+  def subject(%Plug.Conn{private: %{apiac_subject: subject}}), do: subject
   def subject(_), do: nil
 
   @doc """
@@ -77,7 +77,7 @@ defmodule APISex do
   """
 
   @spec metadata(Plug.Conn.t()) :: %{String.t() => String.t()} | nil
-  def metadata(%Plug.Conn{private: %{apisex_metadata: metadata}}), do: metadata
+  def metadata(%Plug.Conn{private: %{apiac_metadata: metadata}}), do: metadata
   def metadata(_), do: nil
 
   @doc """
@@ -91,8 +91,8 @@ defmodule APISex do
   ```elixir
   iex> conn(:get, "/ressource") |>
   ...> Plug.Conn.put_status(:unauthorized) |>
-  ...> APISex.set_WWWauthenticate_challenge("Basic", %{"realm" => "realm_1"}) |>
-  ...> APISex.set_WWWauthenticate_challenge("Bearer", %{"realm" => "realm_1", "error" => "insufficient_scope", "scope" => "group:read group:write"})
+  ...> APIac.set_WWWauthenticate_challenge("Basic", %{"realm" => "realm_1"}) |>
+  ...> APIac.set_WWWauthenticate_challenge("Bearer", %{"realm" => "realm_1", "error" => "insufficient_scope", "scope" => "group:read group:write"})
   %Plug.Conn{
     adapter: {Plug.Adapters.Test.Conn, :...},
     assigns: %{},
@@ -211,12 +211,12 @@ defmodule APISex do
   - test: `:normal`
   - prod: `:normal`
 
-  It uses the APISex configuration key `:env` that is by defaults executed to `Mix.env()`
+  It uses the APIac configuration key `:env` that is by defaults executed to `Mix.env()`
   """
 
   @spec default_error_response_verbosity(Plug.Conn.t()) :: :debug | :normal | :minimal
   def default_error_response_verbosity(_conn) do
-    case Application.get_env(:apisex, :env) do
+    case Application.get_env(:apiac, :env) do
       :dev ->
         :debug
 
@@ -245,7 +245,7 @@ defmodule APISex do
     """
     @spec get(Plug.Conn.t()) :: [t()] | nil
     def get(conn) do
-      conn.private[:apisex_failed_auth_response_data]
+      conn.private[:apiac_failed_auth_response_data]
     end
 
     @doc """
@@ -253,13 +253,13 @@ defmodule APISex do
     """
     @spec put(Plug.Conn.t(), t()) :: Plug.Conn.t()
     def put(
-      %Plug.Conn{private: %{apisex_failed_auth_response_data: data}} = conn,
+      %Plug.Conn{private: %{apiac_failed_auth_response_data: data}} = conn,
       failure_data) when is_list(data) do
-      Plug.Conn.put_private(conn, :apisex_failed_auth_response_data, [failure_data | data])
+      Plug.Conn.put_private(conn, :apiac_failed_auth_response_data, [failure_data | data])
     end
 
     def put(conn, failure_data) do
-      Plug.Conn.put_private(conn, :apisex_failed_auth_response_data, [failure_data])
+      Plug.Conn.put_private(conn, :apiac_failed_auth_response_data, [failure_data])
     end
   end
 end

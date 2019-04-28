@@ -1,4 +1,4 @@
-defmodule APISex.Filter do
+defmodule APIac.Filter do
   @moduledoc """
   Specification for filter plug
 
@@ -12,12 +12,12 @@ defmodule APISex.Filter do
   Either allows or blocks the connection
 
   Returns `{:ok, Plug.Conn.t()}` if the connection is allowed. Returns
-  `{:error, Plug.Conn.t(), %APISex.Filter.Forbidden{}}` otherwise.
+  `{:error, Plug.Conn.t(), %APIac.Filter.Forbidden{}}` otherwise.
 
   The `opts` parameter is the value returned by `Plug.init/1`
   """
   @callback filter(Plug.Conn.t(), opts) ::
-              {:ok, Plug.Conn.t()} | {:error, Plug.Conn.t(), %APISex.Filter.Forbidden{}}
+              {:ok, Plug.Conn.t()} | {:error, Plug.Conn.t(), %APIac.Filter.Forbidden{}}
 
   @doc """
   Sets the HTTP error response and halts the plug
@@ -27,7 +27,7 @@ defmodule APISex.Filter do
   - The `opts[:error_response_verbosity]` function
   Specifics are to be documented in implementation plugs
   """
-  @callback send_error_response(Plug.Conn.t(), %APISex.Filter.Forbidden{}, opts) :: Plug.Conn.t()
+  @callback send_error_response(Plug.Conn.t(), %APIac.Filter.Forbidden{}, opts) :: Plug.Conn.t()
 
   defmodule Forbidden do
     defexception [:filter, :reason, error_data: nil]

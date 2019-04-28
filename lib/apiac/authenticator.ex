@@ -1,4 +1,4 @@
-defmodule APISex.Authenticator do
+defmodule APIac.Authenticator do
   @moduledoc """
   Specification for authenticator plug
 
@@ -15,13 +15,13 @@ defmodule APISex.Authenticator do
 
   Returns `{:ok, Plug.Conn.t, credentials}` if credentials were found. It is required
   to return the `Plug.Conn` object since some things can be fetched in the process
-  (e.g. the HTTP body). The format of `credentials` is specific to an `APISex.Authenticator`
+  (e.g. the HTTP body). The format of `credentials` is specific to an `APIac.Authenticator`
 
-  Returns `{:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{}}` if no
+  Returns `{:error, Plug.Conn.t, %APIac.Authenticator.Unauthorized{}}` if no
   credentials were found or credential extraction failed (because request is malformed,
   parameters are non-standard, or any other reason). When, and only when credentials
   are not present in the request, the `reason` field of the
-  `%APISex.Authenticator.Unauthorized{}` shall be set to the atom `:credentials_not_found`.
+  `%APIac.Authenticator.Unauthorized{}` shall be set to the atom `:credentials_not_found`.
   The semantics are the following:
   - if credentials were *not* found, the HTTP `WWW-Authenticate` can be set to advertise the
   calling client of the available authentication scheme
@@ -34,23 +34,23 @@ defmodule APISex.Authenticator do
 
   @callback extract_credentials(Plug.Conn.t(), opts) ::
               {:ok, Plug.Conn.t(), credentials}
-              | {:error, Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}}
+              | {:error, Plug.Conn.t(), %APIac.Authenticator.Unauthorized{}}
 
   @doc """
-  Validate credentials previously extracted by `APISex.Authenticator.extract_credentials/2`
+  Validate credentials previously extracted by `APIac.Authenticator.extract_credentials/2`
 
   Returns `{:ok, Plug.Conn.t` if credentials are valid. It is required
   to return the `Plug.Conn` object since some things can be fetched in the process
   (e.g. the HTTP body).
 
-  Returns `{:error, Plug.Conn.t, %APISex.Authenticator.Unauthorized{}}` if
+  Returns `{:error, Plug.Conn.t, %APIac.Authenticator.Unauthorized{}}` if
   credentials are invalid
 
   The `opts` parameter is the value returned by `Plug.init/1`
   """
 
   @callback validate_credentials(Plug.Conn.t(), credentials, opts) ::
-              {:ok, Plug.Conn.t()} | {:error, Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}}
+              {:ok, Plug.Conn.t()} | {:error, Plug.Conn.t(), %APIac.Authenticator.Unauthorized{}}
 
   @doc """
   Sets the HTTP error response and halts the plug
@@ -67,7 +67,7 @@ defmodule APISex.Authenticator do
   The `opts` parameter is the value returned by `Plug.init/1`
   """
 
-  @callback send_error_response(Plug.Conn.t(), %APISex.Authenticator.Unauthorized{}, opts) ::
+  @callback send_error_response(Plug.Conn.t(), %APIac.Authenticator.Unauthorized{}, opts) ::
               Plug.Conn.t()
 
   defmodule Unauthorized do
