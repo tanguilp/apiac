@@ -16,7 +16,7 @@ The following APIac plugs are available:
   verification method
   - [APIacAuthMTLS](https://github.com/tanguilp/apiac_auth_mtls): implementation of the
   OAuth 2.0 Mutual TLS Client Authentication and Certificate Bound Access Tokens
-  [draft-ietf-oauth-mtls-12 RFC](https://www.ietf.org/id/draft-ietf-oauth-mtls-12.txt)
+  [RFC8705](https://tools.ietf.org/html/rfc8705)
 - `APIac.Filter`:
   - [APIacFilterIPWhitelist](https://github.com/tanguilp/apiac_filter_ip_whitelist):
   IPv4 and IPv6 address whitelisting
