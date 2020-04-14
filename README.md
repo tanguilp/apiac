@@ -17,6 +17,11 @@ The following APIac plugs are available:
   - [APIacAuthMTLS](https://github.com/tanguilp/apiac_auth_mtls): implementation of the
   OAuth 2.0 Mutual TLS Client Authentication and Certificate Bound Access Tokens
   [RFC8705](https://tools.ietf.org/html/rfc8705)
+  - [APIacAuthClientJWT](https://github.com/tanguilp/apiac_auth_client_jwt): implementation
+  of the client authentication part of [RFC7523](https://tools.ietf.org/html/rfc7523)
+  (JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants)
+  - [APIacAuthClientSecretPost](https://github.com/tanguilp/apiac_auth_client_secret_post):
+  implementation of the OAuth2 client secret post scheme
 - `APIac.Filter`:
   - [APIacFilterIPWhitelist](https://github.com/tanguilp/apiac_filter_ip_whitelist):
   IPv4 and IPv6 address whitelisting
@@ -83,6 +88,8 @@ The following table summarizes the information of the APIac authenticators:
 |------------------|:--------------------------:|:-------------------------------------------------------------------------:|
 | APIacAuthBasic | ✔ | |
 | APIacAuthBearer | OAuth2 client credentials flow | OAuth2 authorization code, implicit and password flows<br/>OpenID Connect flows |
-| APIacAuthnMTLS  | ✔ | |
+| APIacAuthMTLS | ✔ | |
+| APIacAuthClientJWT | ✔ | |
+| APIacAuthClientSecretPost | ✔ | |
 
 Machine-to-machine (also known as server-to-server or s2s) refers to access when only machines are involved, without subject.
