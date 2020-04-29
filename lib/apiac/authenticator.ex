@@ -37,7 +37,7 @@ defmodule APIac.Authenticator do
               | {:error, Plug.Conn.t(), %APIac.Authenticator.Unauthorized{}}
 
   @doc """
-  Validate credentials previously extracted by `APIac.Authenticator.extract_credentials/2`
+  Validate credentials previously extracted by `c:extract_credentials/2`
 
   Returns `{:ok, Plug.Conn.t` if credentials are valid. It is required
   to return the `Plug.Conn` object since some things can be fetched in the process
