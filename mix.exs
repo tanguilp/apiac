@@ -4,7 +4,8 @@ defmodule APIac.Mixfile do
   def project do
     [
       app: :apiac,
-      version: "0.2.0",
+      description: "API access control for Elixir - behaviour definitions and convenience functions",
+      version: "1.0.0",
       elixir: "~> 1.5",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -12,7 +13,9 @@ defmodule APIac.Mixfile do
       docs: [
         main: "readme",
         extras: ["README.md"]
-      ]
+      ],
+      package: package(),
+      source_url: "https://github.com/tanguilp/apiac"
     ]
   end
 
@@ -27,6 +30,13 @@ defmodule APIac.Mixfile do
       {:plug, "~> 1.0"},
       {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+    ]
+  end
+
+  def package() do
+    [
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/tanguilp/apiac"}
     ]
   end
 end
